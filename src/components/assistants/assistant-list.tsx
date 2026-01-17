@@ -1,37 +1,28 @@
+// src/components/assistants/assistant-list.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Search, X } from "lucide-react";
 import { useAssistants } from "@/hooks/use-assistants";
 import { useDeleteAssistant } from "@/hooks/use-assistant-mutations";
 import { useAssistantStore } from "@/store/assistant.store";
+import AssistantCard from "./assistant-card";
 
 export default function AssistantList() {
   const router = useRouter();
   const { data, isLoading, isError, refetch } = useAssistants();
   const deleteMutation = useDeleteAssistant();
 
-  const [searchQuery, setSearchQuery] = useState("");
-
   const openEditModal = useAssistantStore((state) => state.openEditModal);
   const openCreateModal = useAssistantStore((state) => state.openCreateModal);
   const isModalOpen = useAssistantStore((state) => state.isModalOpen);
 
-  // ✅ SOLUCIÓN: Refetch cuando el modal se cierre
   useEffect(() => {
     if (!isModalOpen) {
       refetch();
     }
   }, [isModalOpen, refetch]);
-
-  // Filtrar asistentes por búsqueda
-  const filteredAssistants = data?.filter((assistant) =>
-    assistant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    assistant.language.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    assistant.tone.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   if (isLoading) {
     return (
@@ -111,118 +102,24 @@ export default function AssistantList() {
 
   return (
     <div className="space-y-6">
-      {/* BARRA DE BÚSQUEDA */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Buscar por nombre, idioma o tono..."
-          className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-1">Tus Asistentes</h2>
+        <p className="text-gray-600">
+          Gestiona y entrena tus asistentes de IA para automatizar interacciones.
+        </p>
       </div>
 
-      {/* Resultados de búsqueda */}
-      {searchQuery && (
-        <div className="text-sm text-gray-600">
-          {filteredAssistants && filteredAssistants.length > 0 ? (
-            <p>
-              Se encontraron <strong>{filteredAssistants.length}</strong> asistente(s)
-            </p>
-          ) : (
-            <p className="text-red-600">
-              No se encontraron asistentes que coincidan con "{searchQuery}"
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* GRID DE ASISTENTES */}
-      {filteredAssistants && filteredAssistants.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredAssistants.map((assistant) => (
-            <div
-              key={assistant.id}
-              className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">
-                    {assistant.name}
-                  </h3>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {assistant.language}
-                    </span>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                      {assistant.tone}
-                    </span>
-                  </div>
-                </div>
-
-                {assistant.audioEnabled && (
-                  <div className="text-green-600" title="Audio habilitado">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                    </svg>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-1 mb-4 text-sm text-gray-600">
-                <p>
-                  Cortas: <span className="font-semibold">{assistant.responseLength.short}%</span>
-                </p>
-                <p>
-                  Medianas: <span className="font-semibold">{assistant.responseLength.medium}%</span>
-                </p>
-                <p>
-                  Largas: <span className="font-semibold">{assistant.responseLength.long}%</span>
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => handleTrain(assistant.id)}
-                  className="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition"
-                >
-                  🎓 Entrenar
-                </button>
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => openEditModal(assistant)}
-                    className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition"
-                  >
-                    ✏️ Editar
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(assistant.id, assistant.name)}
-                    disabled={deleteMutation.isPending}
-                    className="flex-1 bg-red-50 text-red-600 py-2 px-4 rounded-lg font-medium hover:bg-red-100 transition disabled:opacity-50"
-                  >
-                    {deleteMutation.isPending ? "..." : "🗑️ Eliminar"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : searchQuery ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No se encontraron resultados</p>
-        </div>
-      ) : null}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {data.map((assistant) => (
+          <AssistantCard
+            key={assistant.id}
+            assistant={assistant}
+            onEdit={() => openEditModal(assistant)}
+            onDelete={() => handleDelete(assistant.id, assistant.name)}
+            onTrain={() => handleTrain(assistant.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
