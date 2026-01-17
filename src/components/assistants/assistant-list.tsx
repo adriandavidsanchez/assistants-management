@@ -54,7 +54,7 @@ export default function AssistantList() {
     router.push(`/assistant/${id}`);
   };
 
-  // Estado vacío
+
   if (!data || data.length === 0) {
     return (
       <div className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-12 text-center">

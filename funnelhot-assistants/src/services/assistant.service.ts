@@ -26,13 +26,13 @@ let assistants: Assistant[] = [
   },
 ];
 
-
+// GET
 export const getAssistants = async (): Promise<Assistant[]> => {
   await delay(400);
   return assistants;
 };
 
-
+// CREATE
 export const createAssistant = async (
   data: Omit<Assistant, "id">
 ): Promise<Assistant> => {
@@ -47,7 +47,7 @@ export const createAssistant = async (
   return newAssistant;
 };
 
-
+// UPDATE
 export const updateAssistant = async (
   assistant: Assistant
 ): Promise<Assistant> => {
@@ -60,11 +60,11 @@ export const updateAssistant = async (
   return assistant;
 };
 
-//(con error aleatorio como pide la prueba)
+// DELETE (con error aleatorio como pide la prueba)
 export const deleteAssistant = async (id: string): Promise<void> => {
   await delay(400);
 
-  //10% de probabilidad de error
+  // 10% de probabilidad de error
   if (Math.random() < 0.1) {
     throw new Error("Error al eliminar el asistente");
   }

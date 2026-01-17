@@ -81,7 +81,6 @@ export default function AssistantTrainingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
-        {/* Header */}
         <div className="mb-6">
           <button
             onClick={() => router.push("/")}
@@ -113,9 +112,7 @@ export default function AssistantTrainingPage() {
           </div>
         </div>
 
-        {/* Content */}
         <div className="grid lg:grid-cols-2 gap-6">
-          {/* Training Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               Entrenamiento del Asistente
@@ -153,8 +150,6 @@ export default function AssistantTrainingPage() {
               </div>
             )}
           </div>
-
-          {/* Chat Simulator */}
           <div>
             <ChatSimulator assistantId={assistantId} />
           </div>

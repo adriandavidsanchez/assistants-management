@@ -53,7 +53,7 @@ export default function AssistantForm() {
   });
 
 const handleNext = async (e?: React.MouseEvent) => {
-  e?.preventDefault(); // ← AGREGAR ESTO
+  e?.preventDefault(); 
   const isValid = await trigger(["name", "language", "tone"]);
   if (isValid) {
     setCurrentStep(2);
@@ -65,7 +65,7 @@ const handleNext = async (e?: React.MouseEvent) => {
   };
 
   const onSubmit = async (data: AssistantFormValues) => {
-    // Si estamos en paso 1, no hacer submit, solo validar
+    
     if (currentStep === 1) {
       return;
     }
@@ -122,7 +122,6 @@ const handleNext = async (e?: React.MouseEvent) => {
 
   return (
     <div>
-      {/* Indicador de pasos */}
       <div className="flex items-center justify-center mb-6">
         <div className="flex items-center gap-2">
           <div

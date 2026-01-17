@@ -37,7 +37,7 @@ export default function ChatSimulator({ assistantId }: Props) {
     setInput("");
     setIsTyping(true);
 
-    // Simular delay de respuesta del asistente (1-2 segundos)
+    // Simular delay (1-2 segundos)
     const delay = Math.random() * 1000 + 1000;
     
     await new Promise((resolve) => setTimeout(resolve, delay));
