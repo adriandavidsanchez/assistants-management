@@ -257,23 +257,11 @@ Desglose:
 - Más fácil de mantener
 - Reutilizable si se necesita
 
-## Mejoras Implementadas
-
-### Barra de Búsqueda
-- **Funcionalidad**: Permite filtrar asistentes en tiempo real por nombre, idioma o tono
-- **UX**: Contador de resultados y botón para limpiar búsqueda
-- **Iconos**: Integración con Lucide React (Search, X)
-- **Casos edge**: Manejo de "sin resultados" con mensaje descriptivo
-
-**Impacto**: 
--  Asistentes aparecen instantáneamente al ser buscado por su nombre
--  Mejor experiencia de usuario
--  Consistencia entre todas las operaciones CRUD
-
 ## Mejoras Futuras
 
 Si tuviera más tiempo, agregaría:
 - [ ] Persistencia con localStorage o base de datos
+- [ ] Barra de busqueda por nombre, idioma o tono
 - [ ] filtros en el listado
 - [ ] Paginación si hay muchos asistentes
 - [ ] Tests unitarios y de integración
